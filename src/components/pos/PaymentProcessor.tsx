@@ -1,7 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from 'react-hot-toast';
 
 interface PaymentProcessorProps {
   amount: number;
@@ -9,44 +10,19 @@ interface PaymentProcessorProps {
   onSuccess: () => void;
 }
 
-export const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcessorProps) => {
+const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcessorProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handlePayment = async () => {
     setIsProcessing(true);
 
-    try {
-      // Simplified payment processing
-      await processOrder('cash-payment');
-
+    // Simulate payment processing
+    setTimeout(() => {
       onSuccess();
-      toast.success('Payment Successful');
-    } catch (error) {
-      toast.error('Payment Failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
-    } finally {
       setIsProcessing(false);
       setIsOpen(false);
-    }
-  };
-
-  const processOrder = async (paymentId: string) => {
-    const response = await fetch('/api/pos/process-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId,
-        paymentId,
-        paymentMethod: 'cash',
-        amount,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to process order');
-    }
+    }, 1500);
   };
 
   return (
@@ -101,3 +77,5 @@ export const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcesso
     </div>
   );
 };
+
+export default PaymentProcessor;

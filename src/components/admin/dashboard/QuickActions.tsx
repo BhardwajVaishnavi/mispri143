@@ -21,7 +21,7 @@ interface ActionItem {
   color: string;
 }
 
-function QuickActions({ className }: QuickActionsProps) {
+const QuickActions = ({ className }: QuickActionsProps) => {
   const actions: ActionItem[] = [
     {
       label: 'Manage Warehouse',

@@ -56,7 +56,7 @@ interface RecentOrdersProps {
   className?: string;
 }
 
-function RecentOrders({ className }: RecentOrdersProps) {
+const RecentOrders = ({ className }: RecentOrdersProps) => {
   const { data, isLoading, error } = useQuery<OrdersResponse>({
     queryKey: ['recent-orders'],
     queryFn: fetchRecentOrders,

@@ -120,7 +120,7 @@ const formatTimeAgo = (timestamp: string) => {
   return format(activityTime, 'MMM dd, h:mm a');
 };
 
-function RecentActivity({ className }: ActivityProps) {
+const RecentActivity = ({ className }: ActivityProps) => {
   const { data, isLoading } = useQuery<ActivityItem[]>({
     queryKey: ['recent-activity'],
     queryFn: fetchRecentActivity,
