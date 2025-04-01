@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { StockTransfer } from '@/components/inventory/StockTransfer';
+import StockTransfer from '@/components/inventory/StockTransfer';
 import { toast } from '@/components/ui/toast';
 
 interface LowStockAlert {

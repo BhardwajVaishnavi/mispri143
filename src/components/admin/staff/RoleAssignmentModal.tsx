@@ -5,8 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircleIcon } from '@heroicons/react/24/outline';
+import { Alert } from '@/components/ui/alert';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 interface User {
   id: string;
@@ -33,7 +33,7 @@ export default function RoleAssignmentModal({
 
   const handleRoleChange = (value: string) => {
     setSelectedRole(value);
-    
+
     // Show warning if changing to or from SUPER_ADMIN
     if (
       (user.role === 'SUPER_ADMIN' && value !== 'SUPER_ADMIN') ||
@@ -84,21 +84,24 @@ export default function RoleAssignmentModal({
           </div>
 
           {showWarning && (
-            <Alert variant="destructive">
-              <AlertCircleIcon className="h-4 w-4 mr-2" />
-              <AlertDescription>
-                {user.role === 'SUPER_ADMIN' 
-                  ? 'Warning: Removing Super Admin privileges will restrict access to critical system functions.'
-                  : 'Warning: Granting Super Admin privileges gives full access to all system functions.'}
-              </AlertDescription>
-            </Alert>
+            <div className="flex items-start space-x-2 p-4 border border-red-300 bg-red-50 rounded-md">
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500 mt-0.5" />
+              <div>
+                <h5 className="font-medium text-red-800">Warning</h5>
+                <p className="text-sm text-red-700">
+                  {user.role === 'SUPER_ADMIN'
+                    ? 'Removing Super Admin privileges will restrict access to critical system functions.'
+                    : 'Granting Super Admin privileges gives full access to all system functions.'}
+                </p>
+              </div>
+            </div>
           )}
 
           <div className="flex justify-end space-x-2">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button 
+            <Button
               type="submit"
               variant={showWarning ? 'destructive' : 'default'}
               disabled={selectedRole === user.role}
