@@ -29,6 +29,13 @@ const nextConfig = {
       use: 'null-loader',
     });
 
+    // Handle missing modules
+    config.resolve = config.resolve || {};
+    config.resolve.fallback = config.resolve.fallback || {};
+    config.resolve.fallback['csv-stringify'] = false;
+    config.resolve.fallback['basic-ftp'] = false;
+    config.resolve.fallback['exceljs'] = false;
+
     return config;
   },
 };

@@ -47,7 +47,7 @@ const generateMockData = (): ProductData[] => {
   ];
 };
 
-export default function TopProducts({ className }: TopProductsProps) {
+const TopProducts = ({ className }: TopProductsProps) => {
   const { data, isLoading } = useQuery<ProductData[]>({
     queryKey: ['top-products'],
     queryFn: fetchTopProducts,

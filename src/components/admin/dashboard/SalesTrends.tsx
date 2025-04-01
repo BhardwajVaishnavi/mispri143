@@ -74,7 +74,7 @@ const generateMockData = (period: string): SalesTrendData[] => {
   return data;
 };
 
-export default function SalesTrends({ className }: SalesTrendsProps) {
+const SalesTrends = ({ className }: SalesTrendsProps) => {
   const [period, setPeriod] = useState<string>('week');
 
   const { data, isLoading } = useQuery<SalesTrendData[]>({

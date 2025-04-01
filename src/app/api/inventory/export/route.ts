@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { stringify } from 'csv-stringify/sync';
 
 export async function GET(request: Request) {
   try {
@@ -24,17 +23,23 @@ export async function GET(request: Request) {
     });
 
     if (format === 'csv') {
-      const csvData = inventory.map(item => ({
-        'Product ID': item.productId,
-        'Product Name': item.product.name,
-        'Store': item.store.name,
-        'Quantity': item.quantity,
-        'Minimum Stock': item.minimumStock,
-        'Last Updated': item.updatedAt.toISOString(),
-      }));
+      // Simple CSV generation without csv-stringify
+      const headers = ['Product ID', 'Product Name', 'Store', 'Quantity', 'Minimum Stock', 'Last Updated'];
 
-      const csv = stringify(csvData, { header: true });
-      
+      let csv = headers.join(',') + '\n';
+
+      inventory.forEach(item => {
+        const row = [
+          item.productId,
+          `"${item.product.name.replace(/"/g, '""')}"`,
+          `"${item.store.name.replace(/"/g, '""')}"`,
+          item.quantity,
+          item.minimumStock,
+          item.updatedAt.toISOString()
+        ];
+        csv += row.join(',') + '\n';
+      });
+
       return new NextResponse(csv, {
         headers: {
           'Content-Type': 'text/csv',
