@@ -36,6 +36,13 @@ const nextConfig = {
     config.resolve.fallback['basic-ftp'] = false;
     config.resolve.fallback['exceljs'] = false;
 
+    // Ignore warnings about missing modules
+    config.ignoreWarnings = [
+      { module: /csv-stringify/ },
+      { module: /basic-ftp/ },
+      { module: /exceljs/ },
+    ];
+
     return config;
   },
 };

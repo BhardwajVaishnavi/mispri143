@@ -1,4 +1,8 @@
 {
   "installCommand": "npm install --legacy-peer-deps csv-stringify basic-ftp exceljs",
-  "buildCommand": "npm run build"
+  "buildCommand": "npm run build",
+  "env": {
+    "NEXTAUTH_URL": "https://mispri143.vercel.app",
+    "NEXTAUTH_SECRET": "mispri-nextauth-secret-key-replace-in-production"
+  }
 }
