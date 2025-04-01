@@ -35,18 +35,18 @@ interface FilterOption {
 export default function ProductListingPage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const { category } = params;
-  
+  const category = params.category as string;
+
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  
+
   // Filters
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('popularity');
-  
+
   // Filter options
   const occasions: FilterOption[] = [
     { id: 'birthday', name: 'Birthday', count: 24 },
@@ -55,7 +55,7 @@ export default function ProductListingPage() {
     { id: 'wedding', name: 'Wedding', count: 12 },
     { id: 'congratulations', name: 'Congratulations', count: 10 },
   ];
-  
+
   const tags: FilterOption[] = [
     { id: 'roses', name: 'Roses', count: 15 },
     { id: 'lilies', name: 'Lilies', count: 12 },
@@ -64,14 +64,14 @@ export default function ProductListingPage() {
     { id: 'vanilla', name: 'Vanilla', count: 15 },
     { id: 'fruit', name: 'Fruit', count: 10 },
   ];
-  
+
   const sortOptions = [
     { id: 'popularity', name: 'Popularity' },
     { id: 'price_low', name: 'Price: Low to High' },
     { id: 'price_high', name: 'Price: High to Low' },
     { id: 'newest', name: 'Newest First' },
   ];
-  
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -82,10 +82,10 @@ export default function ProductListingPage() {
         // queryParams.set('minPrice', priceRange[0].toString());
         // queryParams.set('maxPrice', priceRange[1].toString());
         // queryParams.set('sort', sortBy);
-        
+
         // const response = await fetch(`/api/products/${category}?${queryParams}`);
         // const data = await response.json();
-        
+
         // Mock data for now
         const mockProducts: Product[] = [
           {
@@ -184,30 +184,30 @@ export default function ProductListingPage() {
             occasion: ['thank you', 'congratulations']
           },
         ];
-        
+
         // Filter by category if specified
         let filteredProducts = mockProducts;
         if (category && category !== 'all') {
           filteredProducts = mockProducts.filter(p => p.category === category);
         }
-        
+
         // Apply filters
         if (selectedOccasions.length) {
-          filteredProducts = filteredProducts.filter(p => 
+          filteredProducts = filteredProducts.filter(p =>
             p.occasion && p.occasion.some(o => selectedOccasions.includes(o))
           );
         }
-        
+
         if (selectedTags.length) {
-          filteredProducts = filteredProducts.filter(p => 
+          filteredProducts = filteredProducts.filter(p =>
             p.tags && p.tags.some(t => selectedTags.includes(t))
           );
         }
-        
-        filteredProducts = filteredProducts.filter(p => 
+
+        filteredProducts = filteredProducts.filter(p =>
           p.price >= priceRange[0] && p.price <= priceRange[1]
         );
-        
+
         // Apply sorting
         switch (sortBy) {
           case 'price_low':
@@ -223,7 +223,7 @@ export default function ProductListingPage() {
             filteredProducts.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
             break;
         }
-        
+
         setProducts(filteredProducts);
         setIsLoading(false);
       } catch (error) {
@@ -236,13 +236,13 @@ export default function ProductListingPage() {
   }, [category, selectedOccasions, selectedTags, priceRange, sortBy]);
 
   const toggleOccasion = (id: string) => {
-    setSelectedOccasions(prev => 
+    setSelectedOccasions(prev =>
       prev.includes(id) ? prev.filter(o => o !== id) : [...prev, id]
     );
   };
 
   const toggleTag = (id: string) => {
-    setSelectedTags(prev => 
+    setSelectedTags(prev =>
       prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
     );
   };
@@ -304,23 +304,23 @@ export default function ProductListingPage() {
           </>
         )}
       </div>
-      
+
       <h1 className="text-3xl font-bold text-gray-800 mb-6">{getCategoryTitle()}</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Filters - Desktop */}
         <div className="hidden md:block space-y-6">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-semibold text-gray-800">Filters</h2>
-              <button 
+              <button
                 className="text-sm text-pink-600 hover:text-pink-700"
                 onClick={clearFilters}
               >
                 Clear All
               </button>
             </div>
-            
+
             {/* Price Range */}
             <div className="mb-6">
               <h3 className="font-medium text-gray-800 mb-3">Price Range</h3>
@@ -340,7 +340,7 @@ export default function ProductListingPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Occasions */}
             <div className="mb-6">
               <h3 className="font-medium text-gray-800 mb-3">Occasions</h3>
@@ -353,7 +353,7 @@ export default function ProductListingPage() {
                       onCheckedChange={() => toggleOccasion(occasion.id)}
                       className="mr-2"
                     />
-                    <label 
+                    <label
                       htmlFor={`occasion-${occasion.id}`}
                       className="text-sm text-gray-700 flex-1 cursor-pointer"
                     >
@@ -364,7 +364,7 @@ export default function ProductListingPage() {
                 ))}
               </div>
             </div>
-            
+
             {/* Tags */}
             <div>
               <h3 className="font-medium text-gray-800 mb-3">Tags</h3>
@@ -377,7 +377,7 @@ export default function ProductListingPage() {
                       onCheckedChange={() => toggleTag(tag.id)}
                       className="mr-2"
                     />
-                    <label 
+                    <label
                       htmlFor={`tag-${tag.id}`}
                       className="text-sm text-gray-700 flex-1 cursor-pointer"
                     >
@@ -390,7 +390,7 @@ export default function ProductListingPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Products */}
         <div className="md:col-span-3">
           {/* Sort and filter controls */}
@@ -412,10 +412,10 @@ export default function ProductListingPage() {
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
               </div>
             </div>
-            
+
             <div className="flex items-center">
               <span className="text-gray-600 mr-2">Showing {products.length} products</span>
-              
+
               {/* Mobile filter button */}
               <button
                 className="md:hidden flex items-center bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"
@@ -426,7 +426,7 @@ export default function ProductListingPage() {
               </button>
             </div>
           </div>
-          
+
           {/* Active filters */}
           {(selectedOccasions.length > 0 || selectedTags.length > 0 || priceRange[0] > 0 || priceRange[1] < 5000) && (
             <div className="flex flex-wrap gap-2 mb-6">
@@ -440,7 +440,7 @@ export default function ProductListingPage() {
                   <X className="h-3 w-3 ml-1" />
                 </Badge>
               ))}
-              
+
               {selectedTags.map((id) => (
                 <Badge
                   key={`tag-${id}`}
@@ -451,7 +451,7 @@ export default function ProductListingPage() {
                   <X className="h-3 w-3 ml-1" />
                 </Badge>
               ))}
-              
+
               {(priceRange[0] > 0 || priceRange[1] < 5000) && (
                 <Badge
                   className="bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100"
@@ -461,7 +461,7 @@ export default function ProductListingPage() {
                   <X className="h-3 w-3 ml-1" />
                 </Badge>
               )}
-              
+
               <button
                 className="text-sm text-pink-600 hover:text-pink-700 ml-2"
                 onClick={clearFilters}
@@ -470,7 +470,7 @@ export default function ProductListingPage() {
               </button>
             </div>
           )}
-          
+
           {/* Products grid */}
           {products.length === 0 ? (
             <div className="bg-white rounded-lg shadow-sm p-8 text-center">
@@ -496,7 +496,7 @@ export default function ProductListingPage() {
                         />
                       </div>
                     </Link>
-                    
+
                     {/* Badges */}
                     <div className="absolute top-2 left-2 flex flex-col gap-1">
                       {product.isNew && (
@@ -506,7 +506,7 @@ export default function ProductListingPage() {
                         <Badge className="bg-yellow-500 text-white">Bestseller</Badge>
                       )}
                     </div>
-                    
+
                     {/* Quick actions */}
                     <div className="absolute top-2 right-2">
                       <button className="bg-white rounded-full p-2 shadow-md hover:bg-pink-50">
@@ -514,14 +514,14 @@ export default function ProductListingPage() {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="p-4">
                     <Link href={`/products/${product.category}/${product.slug}`}>
                       <h3 className="font-medium text-gray-800 mb-1 hover:text-pink-600 transition-colors">
                         {product.name}
                       </h3>
                     </Link>
-                    
+
                     <div className="flex items-center mb-2">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
@@ -543,7 +543,7 @@ export default function ProductListingPage() {
                       </div>
                       <span className="text-xs text-gray-500 ml-1">({product.rating})</span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <div>
                         <span className="font-bold text-gray-800">₹{product.price}</span>
@@ -553,8 +553,8 @@ export default function ProductListingPage() {
                           </span>
                         )}
                       </div>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="bg-pink-600 hover:bg-pink-700"
                         onClick={() => handleAddToCart(product.id)}
                       >
@@ -567,7 +567,7 @@ export default function ProductListingPage() {
               ))}
             </div>
           )}
-          
+
           {/* Pagination */}
           <div className="mt-8 flex justify-center">
             <nav className="flex items-center space-x-2">
@@ -585,7 +585,7 @@ export default function ProductListingPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile filters */}
       {isMobileFilterOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
@@ -595,14 +595,14 @@ export default function ProductListingPage() {
               <div className="h-full flex flex-col bg-white shadow-xl">
                 <div className="flex items-center justify-between px-4 py-3 border-b">
                   <h2 className="text-lg font-semibold text-gray-800">Filters</h2>
-                  <button 
+                  <button
                     className="text-gray-500 hover:text-gray-700"
                     onClick={() => setIsMobileFilterOpen(false)}
                   >
                     <X className="h-6 w-6" />
                   </button>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-4">
                   {/* Price Range */}
                   <div className="mb-6">
@@ -623,7 +623,7 @@ export default function ProductListingPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Occasions */}
                   <div className="mb-6">
                     <h3 className="font-medium text-gray-800 mb-3">Occasions</h3>
@@ -636,7 +636,7 @@ export default function ProductListingPage() {
                             onCheckedChange={() => toggleOccasion(occasion.id)}
                             className="mr-2"
                           />
-                          <label 
+                          <label
                             htmlFor={`mobile-occasion-${occasion.id}`}
                             className="text-sm text-gray-700 flex-1 cursor-pointer"
                           >
@@ -647,7 +647,7 @@ export default function ProductListingPage() {
                       ))}
                     </div>
                   </div>
-                  
+
                   {/* Tags */}
                   <div>
                     <h3 className="font-medium text-gray-800 mb-3">Tags</h3>
@@ -660,7 +660,7 @@ export default function ProductListingPage() {
                             onCheckedChange={() => toggleTag(tag.id)}
                             className="mr-2"
                           />
-                          <label 
+                          <label
                             htmlFor={`mobile-tag-${tag.id}`}
                             className="text-sm text-gray-700 flex-1 cursor-pointer"
                           >
@@ -672,16 +672,16 @@ export default function ProductListingPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="border-t border-gray-200 p-4 flex space-x-3">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="flex-1"
                     onClick={clearFilters}
                   >
                     Clear All
                   </Button>
-                  <Button 
+                  <Button
                     className="flex-1 bg-pink-600 hover:bg-pink-700"
                     onClick={() => setIsMobileFilterOpen(false)}
                   >

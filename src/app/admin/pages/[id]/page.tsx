@@ -31,7 +31,7 @@ interface PageData {
 export default function PageEditor() {
   const params = useParams();
   const router = useRouter();
-  const { id } = params;
+  const id = params.id as string;
   const isNewPage = id === 'new';
 
   const [isLoading, setIsLoading] = useState(false);

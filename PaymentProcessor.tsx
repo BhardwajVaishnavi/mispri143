@@ -1,7 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from 'react-hot-toast';
 
 interface PaymentProcessorProps {
   amount: number;
@@ -15,38 +16,13 @@ export const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcesso
 
   const handlePayment = async () => {
     setIsProcessing(true);
-
-    try {
-      // Simplified payment processing
-      await processOrder('cash-payment');
-
+    
+    // Simulate payment processing
+    setTimeout(() => {
       onSuccess();
-      toast.success('Payment Successful');
-    } catch (error) {
-      toast.error('Payment Failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
-    } finally {
       setIsProcessing(false);
       setIsOpen(false);
-    }
-  };
-
-  const processOrder = async (paymentId: string) => {
-    const response = await fetch('/api/pos/process-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId,
-        paymentId,
-        paymentMethod: 'cash',
-        amount,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to process order');
-    }
+    }, 1500);
   };
 
   return (
@@ -60,17 +36,17 @@ export const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcesso
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Payment Details</h3>
-              <button
+              <button 
                 onClick={() => setIsOpen(false)}
                 className="text-gray-400 hover:text-gray-500"
               >
                 ✕
               </button>
             </div>
-
+            
             <div className="space-y-4 py-4">
               <div className="text-xl font-medium">Total: ₹{amount.toFixed(2)}</div>
-
+              
               <div className="flex items-center space-x-2">
                 <input type="radio" id="cash" name="paymentMethod" checked readOnly />
                 <label htmlFor="cash">Cash Payment</label>
@@ -83,10 +59,10 @@ export const PaymentProcessor = ({ amount, orderId, onSuccess }: PaymentProcesso
                 className="mt-2"
               />
             </div>
-
+            
             <div className="flex justify-end space-x-2 mt-4">
-              <Button
-                variant="outline"
+              <Button 
+                variant="outline" 
                 onClick={() => setIsOpen(false)}
               >
                 Cancel

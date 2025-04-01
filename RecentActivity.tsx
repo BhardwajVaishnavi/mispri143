@@ -1,121 +1,121 @@
 'use client';
 
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { format } from 'date-fns';
 import { Card } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
-  ShoppingCartIcon, UserIcon, TruckIcon,
-  CubeIcon, BanknotesIcon
+  ShoppingCartIcon,
+  UserIcon,
+  CurrencyDollarIcon,
+  TruckIcon,
+  DocumentTextIcon,
+  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 
 interface ActivityProps {
   className?: string;
 }
 
-interface ActivityItem {
+interface ActivityUser {
   id: string;
-  type: 'order' | 'customer' | 'inventory' | 'product' | 'payment';
-  message: string;
-  timestamp: string;
-  user?: {
-    name: string;
-    avatar?: string;
-  };
+  name: string;
+  role: string;
 }
 
-const fetchRecentActivity = async (): Promise<ActivityItem[]> => {
-  try {
-    const response = await fetch('/api/activity');
-    if (!response.ok) {
-      throw new Error('Failed to fetch activity');
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Error fetching activity:', error);
-    // Return mock data for demonstration
-    return generateMockData();
-  }
-};
+interface ActivityItem {
+  id: string;
+  type: 'order' | 'user' | 'payment' | 'shipping' | 'inventory' | 'other';
+  message: string;
+  timestamp: string;
+  user?: ActivityUser;
+}
 
-// Generate mock data for demonstration
-const generateMockData = (): ActivityItem[] => {
-  const activities: ActivityItem[] = [
+// Mock API call
+const fetchRecentActivity = async (): Promise<ActivityItem[]> => {
+  // In a real app, this would be an API call
+  return [
     {
       id: '1',
       type: 'order',
       message: 'New order #12345 received',
-      timestamp: new Date(Date.now() - 15 * 60000).toISOString(), // 15 minutes ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 minutes ago
       user: {
-        name: 'John Smith',
+        id: 'u1',
+        name: 'System',
+        role: 'system',
       },
     },
     {
       id: '2',
-      type: 'customer',
-      message: 'New customer registered',
-      timestamp: new Date(Date.now() - 45 * 60000).toISOString(), // 45 minutes ago
+      type: 'payment',
+      message: 'Payment of ₹1,299 received for order #12345',
+      timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(), // 10 minutes ago
       user: {
-        name: 'Emily Johnson',
+        id: 'u2',
+        name: 'Payment Gateway',
+        role: 'system',
       },
     },
     {
       id: '3',
-      type: 'inventory',
-      message: 'Inventory updated for Premium Gift Box',
-      timestamp: new Date(Date.now() - 2 * 3600000).toISOString(), // 2 hours ago
+      type: 'shipping',
+      message: 'Order #12340 marked as delivered',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
       user: {
-        name: 'Admin User',
+        id: 'u3',
+        name: 'John Doe',
+        role: 'admin',
       },
     },
     {
       id: '4',
-      type: 'payment',
-      message: 'Payment received for order #12340',
-      timestamp: new Date(Date.now() - 3 * 3600000).toISOString(), // 3 hours ago
+      type: 'inventory',
+      message: 'Inventory updated for "Red Roses Bouquet"',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // 1 hour ago
+      user: {
+        id: 'u4',
+        name: 'Jane Smith',
+        role: 'inventory',
+      },
     },
     {
       id: '5',
-      type: 'product',
-      message: 'New product "Holiday Special" added',
-      timestamp: new Date(Date.now() - 5 * 3600000).toISOString(), // 5 hours ago
-      user: {
-        name: 'Admin User',
-      },
+      type: 'user',
+      message: 'New user registered: customer@example.com',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
     },
   ];
-
-  return activities;
 };
 
+// Helper function to get icon based on activity type
 const getActivityIcon = (type: string) => {
   switch (type) {
     case 'order':
       return <ShoppingCartIcon className="h-5 w-5 text-blue-500" />;
-    case 'customer':
+    case 'user':
       return <UserIcon className="h-5 w-5 text-green-500" />;
-    case 'inventory':
-      return <TruckIcon className="h-5 w-5 text-yellow-500" />;
-    case 'product':
-      return <CubeIcon className="h-5 w-5 text-purple-500" />;
     case 'payment':
-      return <BanknotesIcon className="h-5 w-5 text-emerald-500" />;
+      return <CurrencyDollarIcon className="h-5 w-5 text-yellow-500" />;
+    case 'shipping':
+      return <TruckIcon className="h-5 w-5 text-purple-500" />;
+    case 'inventory':
+      return <DocumentTextIcon className="h-5 w-5 text-pink-500" />;
     default:
-      return <ShoppingCartIcon className="h-5 w-5 text-gray-500" />;
+      return <ExclamationCircleIcon className="h-5 w-5 text-gray-500" />;
   }
 };
 
+// Format time ago
 const formatTimeAgo = (timestamp: string) => {
-  const now = new Date();
   const activityTime = new Date(timestamp);
-  const diffInMinutes = Math.floor((now.getTime() - activityTime.getTime()) / 60000);
+  const now = new Date();
+  const diffInHours = (now.getTime() - activityTime.getTime()) / (1000 * 60 * 60);
 
-  if (diffInMinutes < 1) return 'Just now';
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}h ago`;
+  if (diffInHours < 24) {
+    return formatDistanceToNow(activityTime, { addSuffix: true });
+  }
 
   return format(activityTime, 'MMM dd, h:mm a');
 };
@@ -169,6 +169,6 @@ function RecentActivity({ className }: ActivityProps) {
       )}
     </Card>
   );
-};
+}
 
 export default RecentActivity;

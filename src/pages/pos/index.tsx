@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/layout/AdminLayout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { PaymentProcessor } from '@/components/pos/PaymentProcessor';
 import { POSService } from '@/lib/services/pos.service';
 
 // Define Product interface
@@ -54,8 +53,8 @@ const POSSystem = () => {
   const handleAddToCart = (product: Product) => {
     const existingItem = cart.find(item => item.productId === product.id);
     if (existingItem) {
-      setCart(cart.map(item => 
-        item.productId === product.id 
+      setCart(cart.map(item =>
+        item.productId === product.id
           ? { ...item, quantity: item.quantity + 1 }
           : item
       ));
@@ -81,7 +80,7 @@ const POSSystem = () => {
         paymentMethod: 'CASH',
         staffId: 'current-staff-id' // Replace with actual staff ID
       });
-      
+
       await printReceipt(order);
       setCart([]);
     } catch (error) {
@@ -96,14 +95,14 @@ const POSSystem = () => {
       <div className="grid grid-cols-3 gap-6 p-6">
         <div className="col-span-2 bg-white p-6 rounded-lg shadow-sm">
           <div className="flex flex-col gap-4">
-            <Input 
-              placeholder="Search products..." 
+            <Input
+              placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <div className="grid grid-cols-4 gap-4">
               {products.map(product => (
-                <div 
+                <div
                   key={product.id}
                   className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50"
                   onClick={() => handleAddToCart(product)}
@@ -116,7 +115,7 @@ const POSSystem = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">Current Order</h2>
@@ -140,17 +139,18 @@ const POSSystem = () => {
                 </tbody>
               </table>
             </div>
-            
+
             <div className="flex justify-between pt-4 border-t">
               <span className="font-semibold">Total:</span>
               <span className="font-semibold">₹{total.toFixed(2)}</span>
             </div>
 
-            <PaymentProcessor
-              amount={total}
-              orderId={cart.length > 0 ? `POS-${Date.now()}` : ''}
-              onSuccess={handleCompleteOrder}
-            />
+            <Button
+              onClick={handleCompleteOrder}
+              disabled={cart.length === 0}
+            >
+              Process Payment
+            </Button>
           </div>
         </div>
       </div>

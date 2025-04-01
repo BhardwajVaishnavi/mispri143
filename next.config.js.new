@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -18,18 +17,6 @@ const nextConfig = {
   // Disable image optimization for now
   images: {
     unoptimized: true,
-  },
-  // Exclude specific files from the build
-  webpack: (config, { isServer }) => {
-    // Add a rule to exclude problematic files
-    config.module = config.module || {};
-    config.module.rules = config.module.rules || [];
-    config.module.rules.push({
-      test: /src\/pages\/pos\/index\.tsx$/,
-      use: 'null-loader',
-    });
-
-    return config;
   },
 };
 

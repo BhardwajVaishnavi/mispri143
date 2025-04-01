@@ -70,7 +70,10 @@ export default function AdminDashboard() {
               columns={tableColumns}
               data={tableData}
               isLoading={false}
-              renderCell={(row, column) => row[column.key]}
+              renderCell={(row, column) => {
+                const key = column.key as keyof typeof row;
+                return row[key];
+              }}
               onSort={(key, direction) => {
                 console.log('Sorting by', key, direction);
               }}

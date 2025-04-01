@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import PageHeader from '@/components/admin/common/PageHeader';
 import DataTable, { Column } from '@/components/DataTable';
-import { 
-  PlusIcon, 
-  FunnelIcon, 
+import {
+  PlusIcon,
+  FunnelIcon,
   ArrowDownTrayIcon,
-  MagnifyingGlassIcon 
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 
 interface CustomerRow {
@@ -95,6 +95,7 @@ export default function CustomersPage() {
         <DataTable<CustomerRow>
           columns={customerColumns}
           data={[]}
+          isLoading={false}
           onSort={(key: string, direction: 'asc' | 'desc') => {
             console.log('Sorting by', key, direction);
           }}

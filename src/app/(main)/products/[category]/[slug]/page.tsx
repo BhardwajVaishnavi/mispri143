@@ -46,22 +46,23 @@ interface Product {
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const { category, slug } = params;
-  
+  const category = params.category as string;
+  const slug = params.slug as string;
+
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<{[key: string]: string}>({});
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
-  
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         // In a real app, fetch from API
         // const response = await fetch(`/api/products/${category}/${slug}`);
         // const data = await response.json();
-        
+
         // Mock data for now
         const mockProduct: Product = {
           id: '1',
@@ -111,9 +112,9 @@ export default function ProductDetailPage() {
           deliveryInfo: 'Same day delivery available if ordered before 4 PM. Standard delivery takes 1-2 business days.',
           careInstructions: 'Keep in a cool place away from direct sunlight. Change water every 2 days. Trim stems at an angle every 3 days.',
         };
-        
+
         setProduct(mockProduct);
-        
+
         // Initialize selected variants with default values
         if (mockProduct.variants) {
           const defaultVariants: {[key: string]: string} = {};
@@ -122,7 +123,7 @@ export default function ProductDetailPage() {
           });
           setSelectedVariants(defaultVariants);
         }
-        
+
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -158,9 +159,9 @@ export default function ProductDetailPage() {
 
   const calculateTotalPrice = () => {
     if (!product) return 0;
-    
+
     let total = product.price;
-    
+
     // Add variant prices
     if (product.variants) {
       product.variants.forEach(variant => {
@@ -175,7 +176,7 @@ export default function ProductDetailPage() {
         }
       });
     }
-    
+
     // Add addon prices
     if (product.addons) {
       product.addons.forEach(addon => {
@@ -184,10 +185,10 @@ export default function ProductDetailPage() {
         }
       });
     }
-    
+
     // Multiply by quantity
     total *= quantity;
-    
+
     return total;
   };
 
@@ -249,7 +250,7 @@ export default function ProductDetailPage() {
         <span className="mx-2">/</span>
         <span className="text-gray-800">{product.name}</span>
       </div>
-      
+
       {/* Back button for mobile */}
       <div className="md:hidden mb-4">
         <Button variant="outline" size="sm" asChild>
@@ -259,7 +260,7 @@ export default function ProductDetailPage() {
           </Link>
         </Button>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product images */}
         <div className="space-y-4">
@@ -282,7 +283,7 @@ export default function ProductDetailPage() {
               </div>
             )}
           </div>
-          
+
           {/* Thumbnail images */}
           {product.images.length > 1 && (
             <div className="flex space-x-2 overflow-x-auto">
@@ -305,11 +306,11 @@ export default function ProductDetailPage() {
             </div>
           )}
         </div>
-        
+
         {/* Product details */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{product.name}</h1>
-          
+
           {/* Ratings */}
           <div className="flex items-center mb-4">
             <div className="flex items-center">
@@ -334,7 +335,7 @@ export default function ProductDetailPage() {
               {product.rating} ({product.reviewsCount} reviews)
             </span>
           </div>
-          
+
           {/* Price */}
           <div className="mb-6">
             <div className="flex items-center">
@@ -352,10 +353,10 @@ export default function ProductDetailPage() {
             </div>
             <p className="text-sm text-gray-500 mt-1">Inclusive of all taxes</p>
           </div>
-          
+
           {/* Description */}
           <p className="text-gray-600 mb-6">{product.description}</p>
-          
+
           {/* Variants */}
           {product.variants && product.variants.map((variant) => (
             <div key={variant.type} className="mb-6">
@@ -382,7 +383,7 @@ export default function ProductDetailPage() {
               </div>
             </div>
           ))}
-          
+
           {/* Addons */}
           {product.addons && (
             <div className="mb-6">
@@ -414,7 +415,7 @@ export default function ProductDetailPage() {
               </div>
             </div>
           )}
-          
+
           {/* Quantity */}
           <div className="mb-6">
             <h3 className="font-semibold text-gray-800 mb-2">Quantity</h3>
@@ -443,7 +444,7 @@ export default function ProductDetailPage() {
               </button>
             </div>
           </div>
-          
+
           {/* Delivery info */}
           <div className="mb-6 bg-gray-50 p-4 rounded-lg">
             <div className="flex items-start">
@@ -454,18 +455,18 @@ export default function ProductDetailPage() {
               </div>
             </div>
           </div>
-          
+
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
+            <Button
               className="flex-1 bg-pink-600 hover:bg-pink-700 text-white py-6"
               onClick={handleAddToCart}
             >
               <ShoppingBag className="h-5 w-5 mr-2" />
               Add to Cart
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1 border-pink-600 text-pink-600 hover:bg-pink-50 py-6"
             >
               <Heart className="h-5 w-5 mr-2" />
@@ -474,7 +475,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Product details tabs */}
       <div className="mt-12">
         <Tabs defaultValue="details">
@@ -483,7 +484,7 @@ export default function ProductDetailPage() {
             <TabsTrigger value="care" className="text-lg py-3">Care Instructions</TabsTrigger>
             <TabsTrigger value="reviews" className="text-lg py-3">Reviews</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="details" className="py-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -497,7 +498,7 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">Delivery Information</h3>
                 <div className="space-y-4">
@@ -510,7 +511,7 @@ export default function ProductDetailPage() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start">
                     <Clock className="h-5 w-5 text-pink-600 mt-1 mr-3" />
                     <div>
@@ -524,18 +525,18 @@ export default function ProductDetailPage() {
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="care" className="py-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Care Instructions</h3>
             <p className="text-gray-600">{product.careInstructions}</p>
           </TabsContent>
-          
+
           <TabsContent value="reviews" className="py-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-gray-800">Customer Reviews</h3>
               <Button>Write a Review</Button>
             </div>
-            
+
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <div className="flex items-center mb-4">
                 <div className="mr-4">
@@ -560,17 +561,17 @@ export default function ProductDetailPage() {
                   </div>
                   <div className="text-sm text-gray-500 mt-1">{product.reviewsCount} reviews</div>
                 </div>
-                
+
                 <div className="flex-1">
                   {/* Rating bars */}
                   {[5, 4, 3, 2, 1].map((star) => (
                     <div key={star} className="flex items-center mb-1">
                       <div className="text-sm text-gray-600 w-8">{star} star</div>
                       <div className="flex-1 h-2 bg-gray-200 rounded-full mx-2">
-                        <div 
-                          className="h-2 bg-yellow-400 rounded-full" 
-                          style={{ 
-                            width: `${Math.random() * 100}%` 
+                        <div
+                          className="h-2 bg-yellow-400 rounded-full"
+                          style={{
+                            width: `${Math.random() * 100}%`
                           }}
                         ></div>
                       </div>
@@ -582,7 +583,7 @@ export default function ProductDetailPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Sample reviews */}
             <div className="space-y-6">
               {[...Array(3)].map((_, i) => (
@@ -616,14 +617,14 @@ export default function ProductDetailPage() {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-6 text-center">
               <Button variant="outline">Load More Reviews</Button>
             </div>
           </TabsContent>
         </Tabs>
       </div>
-      
+
       {/* Related products */}
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">You May Also Like</h2>
@@ -643,14 +644,14 @@ export default function ProductDetailPage() {
                   </div>
                 </Link>
               </div>
-              
+
               <div className="p-4">
                 <Link href="#">
                   <h3 className="font-medium text-gray-800 mb-1 hover:text-pink-600 transition-colors">
                     Related Product {i + 1}
                   </h3>
                 </Link>
-                
+
                 <div className="flex items-center mb-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, j) => (
@@ -672,7 +673,7 @@ export default function ProductDetailPage() {
                   </div>
                   <span className="text-xs text-gray-500 ml-1">(4.0)</span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="font-bold text-gray-800">₹{899 + i * 100}</span>

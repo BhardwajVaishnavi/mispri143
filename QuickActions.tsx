@@ -1,13 +1,16 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import {
-  PlusIcon, ArrowDownTrayIcon, UserPlusIcon,
-  CubeIcon, TruckIcon, DocumentTextIcon,
-  BuildingLibraryIcon, BeakerIcon
+  BuildingLibraryIcon,
+  BeakerIcon,
+  PlusIcon,
+  CubeIcon,
+  TruckIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
 interface QuickActionsProps {
@@ -80,6 +83,6 @@ function QuickActions({ className }: QuickActionsProps) {
       </div>
     </Card>
   );
-};
+}
 
 export default QuickActions;
