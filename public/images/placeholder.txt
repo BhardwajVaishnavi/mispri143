@@ -1,0 +1,41 @@
+This is a placeholder file. In a real project, you would have actual image files here.
+
+For the website to display properly, you would need to add the following images:
+
+1. Hero slider images:
+   - hero-1.jpg
+   - hero-2.jpg
+   - hero-3.jpg
+
+2. Category images:
+   - category-flowers.jpg
+   - category-cakes.jpg
+   - category-plants.jpg
+   - category-gifts.jpg
+   - category-combos.jpg
+   - category-chocolates.jpg
+
+3. Product images:
+   - product-roses.jpg
+   - product-cake.jpg
+   - product-plant.jpg
+   - product-combo.jpg
+   - product-chocolate.jpg
+   - product-gift.jpg
+   - product-mixed-flowers.jpg
+   - product-vanilla-cake.jpg
+
+4. Occasion images:
+   - occasion-birthday.jpg
+   - occasion-anniversary.jpg
+   - occasion-valentines.jpg
+   - occasion-wedding.jpg
+   - same-day-delivery.jpg
+
+5. Avatar images:
+   - avatar-1.jpg
+   - avatar-2.jpg
+   - avatar-3.jpg
+   - avatar-4.jpg
+
+You can download these images from stock photo websites or create them yourself.
